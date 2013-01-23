@@ -6,9 +6,10 @@ module L01.Optional where
 --  }
 data Optional a = Full a | Empty deriving (Eq, Show)
 
-mapOptional :: (a -> b) -> Optional a -> Optional b
+-- :: is of type
+mapOptional :: (a -> b) -> (Optional a -> Optional b)
 mapOptional _ Empty    = Empty
-mapOptional f (Full a) = Full (f a)
+mapOptional f (Full x) = Full (f x)
 
 bindOptional :: Optional a -> (a -> Optional b) -> Optional b
 bindOptional Empty _    = Empty
@@ -22,3 +23,9 @@ Full a ?? _ = a
 Empty <+> o = o
 k <+> _     = k
 
+data Swizzle a b = Swiz a | Swoz b | Swaz
+
+swink :: Optional String -> Optional String
+swink Empty = Full "hi"
+swink (Full "xyz") = Empty
+swink (Full anythingElse) = Full (reverse anythingElse)
